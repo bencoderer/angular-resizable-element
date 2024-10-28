@@ -98,6 +98,101 @@
         }
       }
     },
+    "demo-modal": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "",
+      "sourceRoot": "projects/demo-modal",
+      "prefix": "mwl",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/demo-modal",
+            "index": "projects/demo-modal/index.html",
+            "main": "projects/demo-modal/main.ts",
+            "polyfills": "projects/demo-modal/polyfills.ts",
+            "tsConfig": "projects/demo-modal/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/demo-modal/favicon.ico",
+              "projects/demo-modal/assets"
+            ],
+            "styles": [
+              "projects/demo-modal/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/demo-modal/environments/environment.ts",
+                  "with": "projects/demo-modal/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "demo-modal:build:production"
+            },
+            "development": {
+              "browserTarget": "demo-modal:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+            "noSilent": true,
+            "noBuild": true
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/demo-modal/**/*.ts",
+              "projects/demo-modal/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "angular-resizable-element": {
       "projectType": "library",
       "root": "projects/angular-resizable-element",
