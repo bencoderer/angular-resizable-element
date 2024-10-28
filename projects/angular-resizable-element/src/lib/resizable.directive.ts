@@ -217,6 +217,8 @@ export class ResizableDirective implements OnInit, OnDestroy {
    */
   @Input() enableGhostResize: boolean = false;
 
+  @Input('mwlResizableRootElement') rootElementSelector: string;
+
   /**
    * A snap grid that resize events will be locked to.
    *
@@ -291,15 +293,18 @@ export class ResizableDirective implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
+  public elm: ElementRef;
+
   /**
    * @hidden
    */
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
     private renderer: Renderer2,
-    public elm: ElementRef,
+    public elmOfDirective: ElementRef,
     private zone: NgZone
   ) {
+    this.elm = elmOfDirective;
     this.pointerEventListeners = PointerEventListeners.getInstance(
       renderer,
       zone
@@ -641,6 +646,18 @@ export class ResizableDirective implements OnInit, OnDestroy {
         currentResize = null;
       }
     });
+  }
+
+  ngAfterViewInit() {
+    if (this.rootElementSelector) {
+      const rootElement = this.elmOfDirective.nativeElement.closest(
+        this.rootElementSelector
+      );
+      if (rootElement) {
+        // Use the root element as the element to resize
+        this.elm = new ElementRef(rootElement);
+      }
+    }
   }
 
   /**
